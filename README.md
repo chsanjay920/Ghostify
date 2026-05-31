@@ -1,0 +1,2 @@
+# Ghostify
+Anonymous Chat Application
