@@ -201,7 +201,11 @@ io.on('connection', (socket) => {
   });
 });
 
-const port = process.env.PORT || 3000;
-server.listen(port, () => {
-  console.log(`Chat backend listening on http://localhost:${port}`);
-});
+if (!process.env.VERCEL) {
+  const port = process.env.PORT || 3000;
+  server.listen(port, () => {
+    console.log(`Chat backend listening on http://localhost:${port}`);
+  });
+}
+
+module.exports = app;
