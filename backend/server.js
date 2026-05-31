@@ -19,6 +19,26 @@ app.get('/status', (req, res) => {
 
 });
 
+// Health check endpoint - returns runtime status and basic metrics
+app.get('/health', (req, res) => {
+  try {
+    const memory = process.memoryUsage();
+    const roomsCount = rooms.size;
+    const participants = Array.from(rooms.values()).reduce((acc, r) => acc + (r.participants ? r.participants.length : 0), 0);
+
+    res.json({
+      status: 'ok',
+      uptime: process.uptime(),
+      timestamp: new Date().toISOString(),
+      rooms: roomsCount,
+      participants,
+      memory
+    });
+  } catch (err) {
+    res.status(500).json({ status: 'error', error: String(err) });
+  }
+});
+
 
 const rooms = new Map();
 
