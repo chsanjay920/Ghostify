@@ -25,7 +25,26 @@ export class ChatService {
   connected = signal(false);
 
   constructor(private zone: NgZone) {
-    this.socket = io(environment.backendUrl, {
+    // Determine backend URL:
+    // - Prefer explicit environment.backendUrl when set and not pointing at localhost in production
+    // - If running on a non-localhost host and the env URL points to localhost, fall back to current origin
+    let backendUrl = environment.backendUrl || '';
+    try {
+      if (typeof window !== 'undefined') {
+        const host = window.location.hostname;
+        const isLocalHost = host === 'localhost' || host === '127.0.0.1';
+        const envIsLocal = backendUrl.includes('localhost') || backendUrl.includes('127.0.0.1');
+
+        if (!isLocalHost && envIsLocal) {
+          // Deployed frontend should connect to same origin by default
+          backendUrl = `${window.location.protocol}//${window.location.host}`;
+        }
+      }
+    } catch (e) {
+      // ignore and use backendUrl from environment
+    }
+
+    this.socket = io(backendUrl, {
       transports: ['websocket']
     });
 
