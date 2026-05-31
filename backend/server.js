@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
@@ -7,15 +8,17 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: ['http://localhost:4200'],
+    origin: [process.env.CLIENT_ORIGIN || 'http://localhost:4200'],
     methods: ['GET', 'POST']
   }
 });
 
-app.use(cors({ origin: 'http://localhost:4200' }));
+app.use(cors({ origin: process.env.CLIENT_ORIGIN || 'http://localhost:4200' }));
 app.get('/status', (req, res) => {
   res.json({ status: 'ok' });
+
 });
+
 
 const rooms = new Map();
 

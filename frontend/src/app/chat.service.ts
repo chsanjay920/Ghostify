@@ -1,5 +1,6 @@
 import { Injectable, NgZone, signal } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
+import { environment } from '../environments/environment';
 
 export interface ChatMessage {
   sender: string;
@@ -24,7 +25,7 @@ export class ChatService {
   connected = signal(false);
 
   constructor(private zone: NgZone) {
-    this.socket = io('http://localhost:3000', {
+    this.socket = io(environment.backendUrl, {
       transports: ['websocket']
     });
 

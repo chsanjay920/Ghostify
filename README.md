@@ -66,6 +66,17 @@ http://localhost:4200
 - Use `Join Chat Room` to enter an existing room code and join the conversation.
 - Copy or share the room code/link directly from the chat room header.
 
+## Environment
+
+- Backend: create a `.env` file in the `backend/` folder to configure runtime values. Example:
+
+```env
+PORT=3000
+CLIENT_ORIGIN=http://localhost:4200
+```
+
+- Frontend: environment files are under `frontend/src/environments/`. Update `backendUrl` if the backend runs on a different host or port.
+
 ## Notes
 
 - All rooms, participants, and messages are stored in memory.
