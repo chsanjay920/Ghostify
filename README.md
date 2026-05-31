@@ -77,6 +77,14 @@ CLIENT_ORIGIN=http://localhost:4200
 
 - Frontend: environment files are under `frontend/src/environments/`. Update `backendUrl` if the backend runs on a different host or port.
 
+## Vercel deployment notes
+
+- Vercel hosts serverless functions under `/api/*`. Socket.IO requires a long-running server that supports WebSocket connections and so is not suited to Vercel serverless functions. For production Socket.IO hosting consider platforms like Render, Fly, Railway, or a dedicated VM where the `backend/server.js` process can run continuously.
+
+- This repository includes a small serverless health endpoint for Vercel at `/health` (rewritten to `/api/health`). This endpoint is served from the Vercel function and **cannot** access in-memory rooms or participant counts from the long-running backend. Use it only for basic deployment/liveness checks.
+
+Example: the Vercel health endpoint is implemented in `api/health.js` and a rewrite is configured in `vercel.json` so `https://<your-vercel-app>.vercel.app/health` returns a simple status.
+
 ## Notes
 
 - All rooms, participants, and messages are stored in memory.
